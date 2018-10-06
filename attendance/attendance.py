@@ -12,10 +12,12 @@ def wrangle_atten(filename):
 	for each day as an output in file with name of the format :"filename_presentee.csv"
 	"""
 	
-	li_month=['feb','april','jun','sep','nov']
+	li_month=['april','jun','sep','nov']
 	m=filename.split('.')[0]
 
-	if m in li_month:
+	if m=='feb':
+		n=28
+	elif m in li_month:
 		n=31
 	else:
 		n=32
@@ -28,7 +30,8 @@ def wrangle_atten(filename):
 		read_atten=csv.DictReader(fin)
 		for i in read_atten:
 			list_at.append(i)   
-		
+
+		#print('Total stength of class:-->'+str(len(list_at)))		
 
 		headers=read_atten.fieldnames
 
@@ -39,11 +42,13 @@ def wrangle_atten(filename):
 				if(i[str(j)]=='P:1'):
 					#print(i['Regd No #'])
 					lis.append(int(i['Regd No #'][8:]))
-
-			if(len(lis)==68):
+		
+			if(len(lis)==len(list_at)):
 				pre[j]='All present'
+			elif((list_at[0][str(j)]=='A:1') and (len(lis)==0)):
+				pre[j]='All absent'
 			elif(len(lis)==0):
-				pre[j]='All absent or session not updated'
+				pre[j]='session not updated'
 			else:
 				pre[j]=str(lis)
 
